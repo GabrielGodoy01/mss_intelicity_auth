@@ -1,18 +1,19 @@
 import abc
 import re
+from typing import List
 
-from src.shared.domain.enums.state_enum import STATE
+from src.shared.domain.enums.role_enum import ROLE
 from src.shared.helpers.errors.domain_errors import EntityError
 
 
 class User(abc.ABC):
     name: str
     email: str
-    state: STATE
+    role: ROLE
+    groups: List[str]
     MIN_NAME_LENGTH = 2
-    user_id: int
 
-    def __init__(self, name: str, email: str, state: STATE, user_id: int = None):
+    def __init__(self, name: str, email: str, role: ROLE, groups: List[str] = []):
         if not User.validate_name(name):
             raise EntityError("name")
         self.name = name
@@ -21,18 +22,22 @@ class User(abc.ABC):
             raise EntityError("email")
         self.email = email
 
-        if type(user_id) == int:
-            if user_id < 0:
-                raise EntityError("user_id")
+        if type(role) != ROLE:
+            raise EntityError("role")
+        self.role = role
 
-        if type(user_id) != int and user_id is not None:
-            raise EntityError("user_id")
+        if type(groups) != list:
+            raise EntityError("groups")
+        self.groups = groups
 
-        self.user_id = user_id
-
-        if type(state) != STATE:
-            raise EntityError("state")
-        self.state = state
+    @staticmethod
+    def parse_object(user: dict) -> 'User':
+        return User(
+            email=user['email'],
+            name=user['name'].title(),
+            role=ROLE[user['role']],
+            groups=user.get('groups', [])
+        )
 
     @staticmethod
     def validate_name(name: str) -> bool:
@@ -57,4 +62,4 @@ class User(abc.ABC):
 
 
     def __repr__(self):
-        return f"User(name={self.name}, email={self.email}, user_id={self.user_id}, state={self.state})"
+        return f"User(name={self.name}, email={self.email}, role={self.role})"
