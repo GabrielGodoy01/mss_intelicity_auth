@@ -1,35 +1,44 @@
-from src.shared.domain.entities.enums import ROLE, ACCESS_LEVEL
+from typing import List
+from src.shared.domain.entities.user import User
+from src.shared.domain.enums.groups_enum import GROUPS
+from src.shared.domain.enums.role_enum import ROLE
 
-
-class CheckTokenViewmodel():
-    role: ROLE
-    access_level: ACCESS_LEVEL
+class UserViewmodel:
     email: str
-    user_id: str
-    valid_token: bool
+    name: str
+    role: ROLE
+    groups: List[GROUPS]
+    def __init__(self, user: User):
+        self.user_id = user.user_id
+        self.name = user.name
+        self.email = user.email
+        self.role = user.role
+        self.groups = user.groups
 
-    def __init__(self, role: ROLE, access_level: ACCESS_LEVEL, email: str, valid_token: bool, user_id: str = None):
-        self.role = role
-        self.access_level = access_level
+    def __init__(self, email: str, name: str, role: ROLE, groups: List[GROUPS]):
         self.email = email
-        self.valid_token = valid_token
-        self.user_id = user_id
-
-    @staticmethod
-    def from_dict(data: dict):
-        return CheckTokenViewmodel(
-            role=data['role'],
-            access_level=data['access_level'],
-            email=data['email'],
-            valid_token=data['valid_token'],
-            user_id=data['user_id']
-        )
+        self.name = name
+        self.role = role
+        self.groups = groups
+       
 
     def to_dict(self):
         return {
-            'role': self.role,
-            'access_level': self.access_level,
             'email': self.email,
-            'valid_token': self.valid_token,
-            'user_id': self.user_id if self.user_id else None
+            'name': self.name,
+            'role': self.role.value,
+            'groups': [group.value for group in self.groups],
+            'valid_token': True
+        }
+
+class CheckTokenViewmodel():
+    user: UserViewmodel
+
+    def __init__(self, user: User):
+        self.user = UserViewmodel(email=user.email,name=user.name, sector=user.sector, role_dashboards=user.role_dashboards, role_fiscalizacao=user.role_fiscalizacao, role_geoinfra=user.role_geoinfra, role_drenagem=user.role_drenagem, role_usuarios=user.role_usuarios, role_tickets=user.role_tickets, role_cadastro_obra=user.role_cadastro_obra, role_selimp=user.role_selimp, role_compat=user.role_compat, enabled=user.enabled, status=user.status)
+
+    def to_dict(self):
+        return {
+            'user': self.user.to_dict(),
+            'message': 'Token de usuário válido!'
         }

@@ -15,9 +15,8 @@ class CheckTokenController:
             if len(token) != 2 or token[0] != 'Bearer':
                 return BadRequest('Invalid token.')
             access_token = token[1]
-            data = self.checkTokenUsecase(access_token)
-            data["valid_token"] = True
-            check_token_model = CheckTokenViewmodel.from_dict(data)
+            user = self.checkTokenUsecase(access_token)
+            check_token_model = CheckTokenViewmodel.from_dict(user)
             return OK(check_token_model.to_dict())
 
         except ForbiddenAction as e:

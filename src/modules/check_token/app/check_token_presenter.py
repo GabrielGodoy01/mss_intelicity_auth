@@ -8,10 +8,15 @@ usecase = CheckTokenUsecase(repo)
 controller = CheckTokenController(usecase)
 
 
-def lambda_handler(event, context):
+def update_user_presenter(event, context):
     httpRequest = LambdaHttpRequest(data=event)
     response = controller(httpRequest)
-    httpResponse = LambdaHttpResponse(
-        status_code=response.status_code, body=response.body, headers=response.headers)
+    httpResponse = LambdaHttpResponse(status_code=response.status_code, body=response.body, headers=response.headers)
 
     return httpResponse.toDict()
+
+def lambda_handler(event, context):
+    response = update_user_presenter(event, context)
+    
+    return response
+

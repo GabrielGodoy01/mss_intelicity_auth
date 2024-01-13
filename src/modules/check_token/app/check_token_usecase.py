@@ -1,3 +1,4 @@
+from src.shared.domain.entities.user import User
 from src.shared.domain.repositories.user_repository_interface import IUserRepository
 from src.shared.helpers.errors.usecase_errors import ForbiddenAction
 
@@ -7,11 +8,11 @@ class CheckTokenUsecase:
     def __init__(self, repo: IUserRepository):
         self.repo = repo
 
-    def __call__(self, token: str) -> dict:
+    def __call__(self, token: str) -> User:
 
-        data = self.repo.check_token(token)
+        user = self.repo.check_token(token)
 
-        if not data:
+        if not user:
             raise ForbiddenAction('Invalid Token')
 
-        return data
+        return user
