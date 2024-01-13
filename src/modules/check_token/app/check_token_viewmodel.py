@@ -35,7 +35,7 @@ class CheckTokenViewmodel():
     user: UserViewmodel
 
     def __init__(self, user: User):
-        self.user = UserViewmodel(email=user.email,name=user.name, sector=user.sector, role_dashboards=user.role_dashboards, role_fiscalizacao=user.role_fiscalizacao, role_geoinfra=user.role_geoinfra, role_drenagem=user.role_drenagem, role_usuarios=user.role_usuarios, role_tickets=user.role_tickets, role_cadastro_obra=user.role_cadastro_obra, role_selimp=user.role_selimp, role_compat=user.role_compat, enabled=user.enabled, status=user.status)
+        self.user = UserViewmodel(email=user.email,name=user.name, role=user.role, groups=user.groups)
 
     def to_dict(self):
         return {
