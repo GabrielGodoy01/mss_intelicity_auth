@@ -1,75 +1,32 @@
 from src.shared.domain.entities.user import User
-from src.shared.domain.enums.role_enum import STATE
-from src.shared.helpers.errors.usecase_errors import NoItemsFound
+from src.shared.domain.enums.role_enum import ROLE
 from src.shared.infra.repositories.user_repository_mock import UserRepositoryMock
 import pytest
 
 
 class Test_UserRepositoryMock:
-    def test_get_user(self):
+    def test_get_user_by_email(self):
         repo = UserRepositoryMock()
-        user = repo.get_user(1)
+        user = repo.get_user_by_email('teste@gmail.com')
 
-        assert user.name == "Bruno Soller"
-        assert user.email == "soller@soller.com"
-        assert user.user_id == 1
-        assert user.state == STATE.APPROVED
-
-    def test_get_user_not_found(self):
-        repo = UserRepositoryMock()
-        with pytest.raises(NoItemsFound):
-            user = repo.get_user(69)
-
-    def test_get_all_user(self):
-        repo = UserRepositoryMock()
-        users = repo.get_all_user()
-        assert len(users) == 3
+        assert user.name == 'Gabriel Godoy'
+        assert type(user) == User
 
     def test_create_user(self):
         repo = UserRepositoryMock()
-        user = User(
-            name="Vitor Soller",
-            email="dohype@vitin.com",
-            user_id=4,
-            state=STATE.PENDING
-        )
+        user = repo.create_user(
+            new_user=User(email='teste3@gmail.com', name='Gabriel Godoy', role=ROLE.INTELICITY))
 
-        repo.create_user(user)
+        assert len(repo.users) == 3
+        assert type(user) == User
+        assert repo.users[-1] == user
 
-        assert repo.users[3].name == "Vitor Soller"
-        assert repo.users[3].email == "dohype@vitin.com"
-        assert repo.users[3].user_id == 4
-        assert repo.users[3].state == STATE.PENDING
-
-        assert repo.user_counter == 4
-
-    def test_delete_user(self):
+    def test_check_token(self):
         repo = UserRepositoryMock()
-        user = repo.delete_user(1)
-        assert user.name == "Bruno Soller"
-        assert user.email == "soller@soller.com"
-        assert user.user_id == 1
-        assert user.state == STATE.APPROVED
-
-    def test_delete_user_not_found(self):
-        repo = UserRepositoryMock()
-        with pytest.raises(NoItemsFound):
-            user = repo.delete_user(69)
-
-    def test_update_user(self):
-        repo = UserRepositoryMock()
-        user = repo.update_user(1, "Bruno Guirão")
-
-        assert user.name == "Bruno Guirão"
-        assert repo.users[0].name == "Bruno Guirão"
-
-    def test_update_user_not_found(self):
-        repo = UserRepositoryMock()
-        with pytest.raises(NoItemsFound):
-            user = repo.update_user(69, "Bruno Guirão")
-
-    def test_get_users_counter(self):
-        repo = UserRepositoryMock()
-
-        assert repo.get_user_counter() == 3
-
+        resp = repo.check_token(token="valid_access_token-teste@gmail.com")
+        assert resp == {
+            'email': 'teste@gmail.com',
+            'name': 'Gabriel Godoy',
+            'role': "INTELICITY",
+            'groups': []
+        }

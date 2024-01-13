@@ -11,5 +11,9 @@ class IUserRepository(ABC):
         pass
 
     @abstractmethod
+    def get_user_by_email(self, email: str) -> User:
+        pass
+
+    @abstractmethod
     def check_token(self, token: str) -> dict:  # user data
         pass
