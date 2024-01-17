@@ -31,6 +31,9 @@ class CreateUserController:
             if request.data.get('email') is None:
                 raise MissingParameters('email')
 
+            if request.data.get('groups') is None:
+                raise MissingParameters('groups')
+
             user_dict = {
                 'email': request.data.get('email').replace(' ', ''),
                 'name': request.data.get('name'),
@@ -43,7 +46,6 @@ class CreateUserController:
 
             viewmodel = CreateUserViewmodel(created_user)
             response = Created(viewmodel.to_dict())
-            self.observability.log_controller_out(input=json.dumps(response.body), status_code=response.status_code)
             
             return response
 

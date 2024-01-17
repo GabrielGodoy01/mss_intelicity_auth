@@ -37,7 +37,7 @@ class User(abc.ABC):
             email=user['email'],
             name=user['name'].title(),
             role=ROLE[user['role']],
-            groups=user.get('groups', [])
+            groups=[GROUPS[group] for group in user['groups']]
         )
 
     @staticmethod
