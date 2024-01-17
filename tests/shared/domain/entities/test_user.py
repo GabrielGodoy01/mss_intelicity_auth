@@ -45,6 +45,18 @@ class Test_User:
         with pytest.raises(EntityError):
             User(name='GODOY', email="teste123@maua.br", role=ROLE.INTELICITY, groups=123)
     
+    def test_user_parse_object(self):
+        user = User.parse_object({
+            'name': 'GODOY',
+            'email': 'teste123@maua.br',
+            'role': 'INTELICITY',
+            'groups': ['GAIA']
+        })
+        assert user.name == 'Godoy'
+        assert user.email == 'teste123@maua.br'
+        assert user.role == ROLE.INTELICITY
+        assert user.groups == [GROUPS.GAIA]
+
     def test_user_to_dict(self):
         user = User(name="GODOY", email="teste123@maua.br", role=ROLE.INTELICITY, groups=[GROUPS.GAIA])
         assert user.to_dict() == {
