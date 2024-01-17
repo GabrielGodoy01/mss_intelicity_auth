@@ -44,3 +44,12 @@ class Test_User:
     def test_user_groups_is_not_list(self):
         with pytest.raises(EntityError):
             User(name='GODOY', email="teste123@maua.br", role=ROLE.INTELICITY, groups=123)
+    
+    def test_user_to_dict(self):
+        user = User(name="GODOY", email="teste123@maua.br", role=ROLE.INTELICITY, groups=[GROUPS.GAIA])
+        assert user.to_dict() == {
+            'name': 'GODOY',
+            'email': 'teste123@maua.br',
+            'role': 'INTELICITY',
+            'groups': ['GAIA']
+        }

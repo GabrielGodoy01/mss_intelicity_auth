@@ -1,6 +1,7 @@
 import pytest
 
 from src.modules.check_token.app.check_token_usecase import CheckTokenUsecase
+from src.shared.domain.enums.role_enum import ROLE
 from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.helpers.errors.usecase_errors import ForbiddenAction, NoItemsFound
 from src.shared.infra.repositories.user_repository_mock import UserRepositoryMock
@@ -15,9 +16,9 @@ class Test_CheckTokenUsecase:
         email = 'teste@gmail.com'
         access_token = f'valid_access_token-{email}'
 
-        data = usecase(access_token)
+        user = usecase(access_token)
 
-        assert data['role'] == 'INTELICITY'
+        assert user.role == ROLE.INTELICITY
 
     def test_check_token_usecase_invalid_token(self):
         repo = UserRepositoryMock()

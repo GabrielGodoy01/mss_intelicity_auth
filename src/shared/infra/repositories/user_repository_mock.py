@@ -29,7 +29,7 @@ class UserRepositoryMock(IUserRepository):
             pass
         return user
     
-    def check_token(self, token: str) -> dict:
+    def check_token(self, token: str) -> User:
 
         split_token = token.split("-")
         if len(split_token) != 2 or split_token[0] != "valid_access_token":
@@ -41,5 +41,4 @@ class UserRepositoryMock(IUserRepository):
         if user is None:
             return None
 
-        data = user.to_dict()
-        return data
+        return user

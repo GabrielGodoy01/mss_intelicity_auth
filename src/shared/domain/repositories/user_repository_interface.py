@@ -15,5 +15,5 @@ class IUserRepository(ABC):
         pass
 
     @abstractmethod
-    def check_token(self, token: str) -> dict:  # user data
+    def check_token(self, token: str) -> User:  # user data
         pass

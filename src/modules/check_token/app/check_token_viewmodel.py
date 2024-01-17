@@ -8,12 +8,6 @@ class UserViewmodel:
     name: str
     role: ROLE
     groups: List[GROUPS]
-    def __init__(self, user: User):
-        self.user_id = user.user_id
-        self.name = user.name
-        self.email = user.email
-        self.role = user.role
-        self.groups = user.groups
 
     def __init__(self, email: str, name: str, role: ROLE, groups: List[GROUPS]):
         self.email = email

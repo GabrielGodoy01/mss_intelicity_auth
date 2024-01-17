@@ -67,8 +67,8 @@ class User(abc.ABC):
             'email': self.email,
             'name': self.name,
             'role': self.role.value,
-            'groups': self.groups
+            'groups': [group.value for group in self.groups]
         }
 
     def __repr__(self):
-        return f"User(name={self.name}, email={self.email}, role={self.role})"
+        return f"User(name={self.name}, email={self.email}, role={self.role}, groups={self.groups})"

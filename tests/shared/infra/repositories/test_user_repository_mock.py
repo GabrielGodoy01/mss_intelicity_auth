@@ -23,10 +23,9 @@ class Test_UserRepositoryMock:
 
     def test_check_token(self):
         repo = UserRepositoryMock()
-        resp = repo.check_token(token="valid_access_token-teste@gmail.com")
-        assert resp == {
-            'email': 'teste@gmail.com',
-            'name': 'Gabriel Godoy',
-            'role': "INTELICITY",
-            'groups': []
-        }
+        user = repo.check_token(token="valid_access_token-teste@gmail.com")
+        assert user.email == 'teste@gmail.com'
+        assert type(user) == User
+        assert user.name == 'Gabriel Godoy'
+        assert user.role == ROLE.INTELICITY
+        assert user.groups == []
