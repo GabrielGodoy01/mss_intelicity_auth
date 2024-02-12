@@ -28,8 +28,11 @@ if 'prod' == github_ref_name:
 elif 'homolog' == github_ref_name:
     stage = 'HOMOLOG'
 
-else:
+elif 'dev' == github_ref_name:
     stage = 'DEV'
+
+else:
+    stage = 'TEST'
 
 tags = {
     'project': 'Intelicity Auth',
