@@ -53,7 +53,6 @@ class IacStack(Stack):
         ENVIRONMENT_VARIABLES = {
             "STAGE": stage,
             "USER_POOL_ID":  self.user_pool_id,
-            "AWS_REGION": self.aws_region,
             "USER_POOL_NAME": self.user_pool_name
         }
 
