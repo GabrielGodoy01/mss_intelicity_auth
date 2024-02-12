@@ -7,6 +7,7 @@ from src.shared.infra.repositories.user_repository_cognito import UserRepository
 from src.shared.infra.repositories.user_repository_mock import UserRepositoryMock
 
 class STAGE(Enum):
+    DOTENV = "DOTENV"
     DEV = "DEV"
     HOMOLOG = "HOMOLOG"
     PROD = "PROD"
@@ -21,19 +22,42 @@ class Environments:
 
     """
     stage: STAGE
+    region: str
+    user_pool_id: str
+    client_id: str
+
+    def _configure_local(self):
+        from dotenv import load_dotenv
+        load_dotenv()
+        os.environ["STAGE"] = os.environ.get("STAGE") or STAGE.DOTENV.value
 
     def load_envs(self):
-        if "STAGE" not in os.environ or os.environ["STAGE"] == STAGE.DEV.value:
-            os.environ["STAGE"] = os.environ.get("STAGE") or STAGE.DEV.value
+        if "STAGE" not in os.environ or os.environ["STAGE"] == STAGE.DOTENV.value:
+            self._configure_local()
 
         self.stage = STAGE[os.environ.get("STAGE")]
 
+        if self.stage == STAGE.TEST:
+            self.region = "sa-east-1"
+            self.user_pool_id = "test"
+            self.client_id = "test"
+
+        else:
+            self.region = os.environ.get("AWS_REGION")
+            self.user_pool_id = os.environ.get("AWS_USER_POOL_ID")
+            self.client_id = os.environ.get("AWS_CLIENT_ID")
+
+
+
     @staticmethod
     def get_user_repo() -> IUserRepository:
-        if Environments.get_envs().stage == STAGE.PROD:
+        if Environments.get_envs().stage == STAGE.TEST:
+            return UserRepositoryMock
+        elif Environments.get_envs().stage in [STAGE.PROD, STAGE.DEV, STAGE.HOMOLOG]:
             return UserRepositoryCognito
         else:
-            return UserRepositoryMock
+            raise Exception("No repository found for this stage")
+            
 
     @staticmethod
     def get_envs() -> "Environments":

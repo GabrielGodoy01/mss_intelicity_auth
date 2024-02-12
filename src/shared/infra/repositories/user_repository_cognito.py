@@ -7,6 +7,7 @@ from botocore.exceptions import ClientError
 from src.shared.domain.entities.user import User
 from src.shared.domain.enums.groups_enum import GROUPS
 from src.shared.domain.repositories.user_repository_interface import IUserRepository
+from src.shared.environments import Environments
 from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.helpers.errors.usecase_errors import DuplicatedItem, ForbiddenAction, InvalidCredentials, InvalidTokenError
 from src.shared.infra.dtos.user_cognito_dto import UserCognitoDTO
@@ -19,9 +20,9 @@ class UserRepositoryCognito(IUserRepository):
     client_id: str
 
     def __init__(self):
-        self.client = boto3.client('cognito-idp', region_name="sa-east-1")
-        self.user_pool_id = "sa-east-1_BM8l9PeRZ";
-        self.client_id = "1791soos64mqql1bors992jk43"
+        self.client = boto3.client('cognito-idp', region_name=Environments.get_envs().region)
+        self.user_pool_id = Environments.get_envs().user_pool_id
+        self.client_id = Environments.get_envs().client_id
 
     
     def get_user_by_email(self, email: str) -> User:
