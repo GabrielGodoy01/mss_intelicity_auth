@@ -9,7 +9,7 @@ from src.shared.domain.enums.groups_enum import GROUPS
 from src.shared.domain.repositories.user_repository_interface import IUserRepository
 from src.shared.environments import Environments
 from src.shared.helpers.errors.domain_errors import EntityError
-from src.shared.helpers.errors.usecase_errors import DuplicatedItem, ForbiddenAction, InvalidCredentials, InvalidTokenError
+from src.shared.helpers.errors.usecase_errors import DuplicatedItem, ForbiddenAction, InvalidCredentials
 from src.shared.infra.dtos.user_cognito_dto import UserCognitoDTO
 
 
