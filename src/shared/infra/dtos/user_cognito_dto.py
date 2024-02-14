@@ -64,5 +64,9 @@ class UserCognitoDTO:
             role=self.role,
             groups=self.groups
         )
+    
+    @staticmethod
+    def parse_attribute(name, value) -> dict:
+        return {'Name': name, 'Value': str(value)}
 
 
