@@ -55,7 +55,7 @@ class UserRepositoryCognito(IUserRepository):
             self.client.admin_create_user(
                 UserPoolId=self.user_pool_id,
                 Username=user.email,
-                DesiredDeliveryMediums="EMAIL",
+                DesiredDeliveryMediums=["EMAIL"],
                 UserAttributes=cognito_attributes)
             
             for group in user.groups:

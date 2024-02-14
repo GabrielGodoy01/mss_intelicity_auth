@@ -42,8 +42,8 @@ class Environments:
 
         else:
             self.region = os.environ.get("AWS_REGION")
-            self.user_pool_id = os.environ.get("AWS_USER_POOL_ID")
-            self.client_id = os.environ.get("AWS_CLIENT_ID")
+            self.user_pool_id = os.environ.get("USER_POOL_ID")
+            self.client_id = os.environ.get("APP_CLIENT_ID")
 
 
 
