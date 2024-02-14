@@ -17,12 +17,14 @@ class Test_UserCognitoDTO:
         user_cognito_dto_expected = UserCognitoDTO(
             email=user.email,
             name=user.name,
-            role=user.role
+            role=user.role.value,
+            groups=user.groups
         )
 
         assert user_cognito_dto.email == user_cognito_dto_expected.email
         assert user_cognito_dto.name == user_cognito_dto_expected.name
         assert user_cognito_dto.role == user_cognito_dto_expected.role
+        assert user_cognito_dto.groups == user_cognito_dto_expected.groups
 
     def test_from_entity_none(self):
         user = User(email="joao@hotmail.com", name='João', role=ROLE.INTELICITY, groups=[GROUPS.GAIA])
@@ -31,12 +33,14 @@ class Test_UserCognitoDTO:
         user_cognito_dto_expected = UserCognitoDTO(
             email=user.email,
             name=user.name,
-            role=user.role
+            role=user.role.value,
+            groups=user.groups
         )
         
         assert user_cognito_dto.email == user_cognito_dto_expected.email
         assert user_cognito_dto.name == user_cognito_dto_expected.name
         assert user_cognito_dto.role == user_cognito_dto_expected.role
+        assert user_cognito_dto.groups == user_cognito_dto_expected.groups
 
     def test_from_cognito(self):
         data = cognito_data = {'enabled': 'true',
@@ -78,7 +82,8 @@ class Test_UserCognitoDTO:
         user_cognito_dto = UserCognitoDTO(
             email = repo.users[0].email,
             name = repo.users[0].name,
-            role = repo.users[0].role
+            role = repo.users[0].role.value,
+            groups = repo.users[0].groups
         )
 
         user = user_cognito_dto.to_entity()
@@ -86,3 +91,4 @@ class Test_UserCognitoDTO:
         assert user.email == repo.users[0].email
         assert user.name == repo.users[0].name
         assert user.role == repo.users[0].role
+        assert user.groups == repo.users[0].groups
