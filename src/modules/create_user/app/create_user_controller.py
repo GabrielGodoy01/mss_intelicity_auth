@@ -18,6 +18,11 @@ class CreateUserController:
 
     def __call__(self, request: IRequest) -> IResponse:
         try:
+            
+            if request.data.get('Authorization') is None:
+                raise MissingParameters('Authorization header')
+
+            token = request.data.get('Authorization').split(' ')
 
             if request.data.get('role') is None:
                 raise MissingParameters('role')
