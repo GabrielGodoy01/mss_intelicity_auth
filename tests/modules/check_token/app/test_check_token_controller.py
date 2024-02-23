@@ -23,7 +23,7 @@ class Test_CheckTokenController:
                 'role': 'INTELICITY',
                 'email': 'teste@gmail.com',
                 'valid_token': True,
-                'groups': []
+                'groups': ['GAIA']
             },
             'message': 'Token de usuário válido!'
         }
@@ -38,4 +38,4 @@ class Test_CheckTokenController:
 
         response = controller(request)
         assert response.status_code == 400
-        assert response.body["message"] == 'Parâmetro inválido: Campo access_token não é válido'
+        assert response.body["message"] == 'Parâmetro inválido: access_token'

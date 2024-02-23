@@ -17,3 +17,7 @@ class IUserRepository(ABC):
     @abstractmethod
     def check_token(self, token: str) -> User:  # user data
         pass
+
+    @abstractmethod
+    def get_users_in_group(self, group_name: str) -> List[User]:
+        pass

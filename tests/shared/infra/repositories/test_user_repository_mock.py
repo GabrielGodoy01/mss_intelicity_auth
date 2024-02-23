@@ -17,7 +17,7 @@ class Test_UserRepositoryMock:
         user = repo.create_user(
             new_user=User(email='teste3@gmail.com', name='Gabriel Godoy', role=ROLE.INTELICITY))
 
-        assert len(repo.users) == 3
+        assert len(repo.users) == 4
         assert type(user) == User
         assert repo.users[-1] == user
 
@@ -28,4 +28,15 @@ class Test_UserRepositoryMock:
         assert type(user) == User
         assert user.name == 'Gabriel Godoy'
         assert user.role == ROLE.INTELICITY
-        assert user.groups == []
+        assert user.groups == ['GAIA']
+
+    def test_get_users_in_group(self):
+        repo = UserRepositoryMock()
+        users = repo.get_users_in_group('GAIA')
+
+        assert len(users) == 1
+        assert type(users[0]) == User
+        assert users[0].email == 'teste@gmail.com'
+        assert users[0].name == 'Gabriel Godoy'
+        assert users[0].role == ROLE.INTELICITY
+        assert users[0].groups == ['GAIA']

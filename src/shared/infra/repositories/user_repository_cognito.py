@@ -96,3 +96,24 @@ class UserRepositoryCognito(IUserRepository):
                 raise InvalidCredentials(message="Token inválido ou expirado")
             else:
                 raise ForbiddenAction(message=e.response.get('Error').get('Message'))
+    
+    def get_users_in_group(self, group_name: str) -> List[User]:
+        try:
+            users = []
+            response = self.client.list_users_in_group(
+                UserPoolId=self.user_pool_id,
+                GroupName=group_name
+            )
+
+            for user in response.get('Users'):
+                user = UserCognitoDTO.from_cognito(user).to_entity()
+                user.groups = [GROUPS(group_name)]
+                users.append(user)
+            
+            return users
+
+        except self.client.exceptions.ResourceNotFoundException as e:
+            raise EntityError(e.response.get('Error').get('Message'))
+
+        except self.client.exceptions.InvalidParameterException as e:
+            raise EntityError(e.response.get('Error').get('Message'))

@@ -12,8 +12,9 @@ class UserRepositoryMock(IUserRepository):
 
     def __init__(self):
         self.users = [
-            User(email='teste@gmail.com', name='Gabriel Godoy', role=ROLE.INTELICITY),
-            User(email='teste2@gmail.com', name='Gabriel Godoy', role=ROLE.INTELICITY)
+            User(email='teste@gmail.com', name='Gabriel Godoy', role=ROLE.INTELICITY, groups=['GAIA']),
+            User(email='teste2@gmail.com', name='Gabriel Godoy', role=ROLE.INTELICITY),
+            User(email='teste3@gmail.com', name='Gabriel Godoy', role=ROLE.USER),
         ]
 
     def create_user(self, new_user: User) -> User:
@@ -42,3 +43,10 @@ class UserRepositoryMock(IUserRepository):
             return None
 
         return user
+    
+    def get_users_in_group(self, group_name: str) -> List[User]:
+        users: List[User] = []
+        for user in self.users:
+            if group_name in user.groups:
+                users.append(user)
+        return users

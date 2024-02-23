@@ -1,16 +1,17 @@
+from typing import List
 from src.shared.domain.entities.user import User
 from src.shared.domain.enums.role_enum import ROLE
 from src.shared.domain.repositories.user_repository_interface import IUserRepository
 from src.shared.helpers.errors.usecase_errors import ForbiddenAction, NoItemsFound
 
 
-class CreateUserUsecase:
+class ListUsersInGroupUsecase:
 
     def __init__(self, repo: IUserRepository):
         self.repo = repo
 
-    def __call__(self, user_to_create: User, access_token: str) -> User:
-
+    def __call__(self, group_name: str, access_token: str) -> List[User]:
+            
         user_requester = self.repo.check_token(access_token)
 
         if user_requester is None:
@@ -19,8 +20,9 @@ class CreateUserUsecase:
         if user_requester.role != ROLE.INTELICITY and user_requester.role != ROLE.ADMIN:
             raise ForbiddenAction("user")
 
-        user_to_create.email = user_to_create.email.lower()
-        
-        user_response = self.repo.create_user(user_to_create)
+        if group_name not in user_requester.groups:
+            raise ForbiddenAction("user não esta no grupo informado")
 
-        return user_response
+        users_response = self.repo.get_users_in_group(group_name)
+
+        return users_response

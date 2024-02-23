@@ -24,6 +24,10 @@ class CreateUserController:
 
             token = request.data.get('Authorization').split(' ')
 
+            if len(token) != 2 or token[0] != 'Bearer':
+                raise EntityError('access_token')
+            access_token = token[1]
+
             if request.data.get('role') is None:
                 raise MissingParameters('role')
 
@@ -47,7 +51,7 @@ class CreateUserController:
             }
 
             new_user = User.parse_object(user_dict)
-            created_user = self.createUserUsecase(new_user)
+            created_user = self.createUserUsecase(user_to_create=new_user, access_token=access_token)
 
             viewmodel = CreateUserViewmodel(created_user)
             response = Created(viewmodel.to_dict())

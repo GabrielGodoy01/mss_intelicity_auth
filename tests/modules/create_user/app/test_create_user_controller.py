@@ -10,13 +10,14 @@ class Test_CreateUserController:
         repo = UserRepositoryMock()
         usecase = CreateUserUsecase(repo)
         controller = CreateUserController(usecase)
+        header = {"Authorization": "Bearer valid_access_token-teste@gmail.com"}
 
         request = HttpRequest(body={
             'name': 'Gabriel Godoy',
             'email': 'teste@gmail.com',
             'role': 'INTELICITY',
             'groups': ['GAIA']
-        })
+        }, headers=header)
 
         response = controller(request)
 
@@ -31,7 +32,7 @@ class Test_CreateUserController:
             'message': 'Usuário foi criado com sucesso!'
         }
     
-    def test_create_user_controller_no_role(self):
+    def test_create_user_controller_no_authorization_header(self):
         repo = UserRepositoryMock()
         usecase = CreateUserUsecase(repo)
         controller = CreateUserController(usecase)
@@ -45,49 +46,90 @@ class Test_CreateUserController:
         response = controller(request)
 
         assert response.status_code == 400
+        assert response.body == "Parâmetro ausente: Authorization header"
+    
+    def test_create_user_controller_authorization_header_not_bearer(self):
+        repo = UserRepositoryMock()
+        usecase = CreateUserUsecase(repo)
+        controller = CreateUserController(usecase)
+        header = {"Authorization": "valid_access_token-teste@gmail.com"}
+
+        request = HttpRequest(body={
+            'name': 'Gabriel Godoy',
+            'email': 'teste@gmail.com',
+            'groups': ['GAIA']
+        }, headers=header)
+
+        response = controller(request)
+
+        assert response.status_code == 400
+        assert response.body == "Parâmetro inválido: access_token"
+    
+    def test_create_user_controller_no_role(self):
+        repo = UserRepositoryMock()
+        usecase = CreateUserUsecase(repo)
+        controller = CreateUserController(usecase)
+        header = {"Authorization": "Bearer valid_access_token-teste@gmail.com"}
+
+        request = HttpRequest(body={
+            'name': 'Gabriel Godoy',
+            'email': 'teste@gmail.com',
+            'groups': ['GAIA']
+        }, headers=header)
+
+        response = controller(request)
+
+        assert response.status_code == 400
+        assert response.body == "Parâmetro ausente: role"
     
     def test_create_user_controller_role_not_valid(self):
         repo = UserRepositoryMock()
         usecase = CreateUserUsecase(repo)
         controller = CreateUserController(usecase)
+        header = {"Authorization": "Bearer valid_access_token-teste@gmail.com"}
 
         request = HttpRequest(body={
             'name': 'Gabriel Godoy',
             'role': '123',
             'email': 'teste@gmail.com',
             'groups': ['GAIA']
-        })
+        }, headers=header)
 
         response = controller(request)
 
         assert response.status_code == 400
+        assert response.body == "Parâmetro inválido: role"
 
     
     def test_create_user_controller_no_name(self):
         repo = UserRepositoryMock()
         usecase = CreateUserUsecase(repo)
         controller = CreateUserController(usecase)
+        header = {"Authorization": "Bearer valid_access_token-teste@gmail.com"}
+
 
         request = HttpRequest(body={
             'email': 'teste@gmail.com',
             'role': 'INTELICITY',
             'groups': ['GAIA']
-        })
+        }, headers=header)
 
         response = controller(request)
 
         assert response.status_code == 400
+        assert response.body == "Parâmetro ausente: name"
     
     def test_create_user_controller_no_email(self):
         repo = UserRepositoryMock()
         usecase = CreateUserUsecase(repo)
         controller = CreateUserController(usecase)
+        header = {"Authorization": "Bearer valid_access_token-teste@gmail.com"}
 
         request = HttpRequest(body={
             'name': 'Gabriel Godoy',
             'role': 'INTELICITY',
             'groups': ['GAIA']
-        })
+        }, headers=header)
 
         response = controller(request)
 
@@ -97,13 +139,15 @@ class Test_CreateUserController:
         repo = UserRepositoryMock()
         usecase = CreateUserUsecase(repo)
         controller = CreateUserController(usecase)
+        header = {"Authorization": "Bearer valid_access_token-teste@gmail.com"}
 
         request = HttpRequest(body={
             'name': 'Gabriel Godoy',
             'email': 'teste@gmail.com',
             'role': 'INTELICITY',
-        })
+        }, headers=header)
 
         response = controller(request)
 
         assert response.status_code == 400
+        assert response.body == "Parâmetro ausente: groups"

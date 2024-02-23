@@ -52,7 +52,15 @@ class LambdaStack(Construct):
             environment_variables=environment_variables,
         )
 
+        self.list_users_in_group = self.create_lambda_api_gateway_integration(
+            module_name="list_users_in_group",
+            method="POST",
+            api_resource=api_gateway_resource,
+            environment_variables=environment_variables,
+        )
+
         self.functions_that_need_cognito_permissions = [
             self.check_token,
-            self.create_user
+            self.create_user,
+            self.list_users_in_group
         ]
