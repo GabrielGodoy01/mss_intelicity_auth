@@ -1,5 +1,6 @@
 from src.modules.list_users_in_group.app.list_users_in_group_usecase import ListUsersInGroupUsecase
 from src.modules.list_users_in_group.app.list_users_in_group_viewmodel import ListUsersInGroupViewmodel
+from src.shared.domain.enums.groups_enum import GROUPS
 from src.shared.helpers.errors.controller_errors import MissingParameters
 from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.helpers.errors.usecase_errors import InvalidCredentials
@@ -24,9 +25,11 @@ class ListUsersInGroupController:
 
             if request.data.get('group') is None:
                 raise MissingParameters('group')
+
+            if request.data.get('group') not in [g.value for g in GROUPS]:
+                    raise EntityError('group')
             
-            group_name = request.data.get('group')
-            list_users = self.listUsersInGroupUsecase(group_name=group_name, access_token=access_token)
+            list_users = self.listUsersInGroupUsecase(group=GROUPS(request.data.get('group')), access_token=access_token)
 
             viewmodel = ListUsersInGroupViewmodel(users=list_users)
 

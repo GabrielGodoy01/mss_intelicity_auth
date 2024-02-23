@@ -62,7 +62,7 @@ class UserRepositoryCognito(IUserRepository):
                 self.client.admin_add_user_to_group(
                     UserPoolId=self.user_pool_id,
                     Username=user.email,
-                    GroupName=group.value
+                    GroupName=group
                 )
 
         except self.client.exceptions.UsernameExistsException:
@@ -97,23 +97,55 @@ class UserRepositoryCognito(IUserRepository):
             else:
                 raise ForbiddenAction(message=e.response.get('Error').get('Message'))
     
-    def get_users_in_group(self, group_name: str) -> List[User]:
+    def get_users_in_group(self, group: str) -> List[User]:
         try:
             users = []
             response = self.client.list_users_in_group(
                 UserPoolId=self.user_pool_id,
-                GroupName=group_name
+                GroupName=group
             )
 
             for user in response.get('Users'):
                 user = UserCognitoDTO.from_cognito(user).to_entity()
-                user.groups = [GROUPS(group_name)]
+                user.groups = [GROUPS(group)]
                 users.append(user)
             
             return users
 
         except self.client.exceptions.ResourceNotFoundException as e:
             raise EntityError(e.response.get('Error').get('Message'))
+
+        except self.client.exceptions.InvalidParameterException as e:
+            raise EntityError(e.response.get('Error').get('Message'))
+    
+    def update_user(self, user_email: str, kvp_to_update: dict, addGroups: List[str] = None, removeGroups: List[str] = None) -> User:
+        try:
+
+            response = self.client.admin_update_user_attributes(
+                UserPoolId=self.user_pool_id,
+                Username=user_email,
+                UserAttributes=[{'Name': UserCognitoDTO.TO_COGNITO_DICT[key], 'Value': value} for key, value in kvp_to_update.items()]
+            )
+
+            if addGroups is not None:
+                for group in addGroups:
+                    self.client.admin_add_user_to_group(
+                        UserPoolId=self.user_pool_id,
+                        Username=user_email,
+                        GroupName=group
+                    )
+            
+            if removeGroups is not None:
+                for group in removeGroups:
+                    self.client.admin_remove_user_from_group(
+                        UserPoolId=self.user_pool_id,
+                        Username=user_email,
+                        GroupName=group
+                    )
+
+            user = self.get_user_by_email(user_email)
+
+            return user
 
         except self.client.exceptions.InvalidParameterException as e:
             raise EntityError(e.response.get('Error').get('Message'))

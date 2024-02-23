@@ -1,5 +1,6 @@
 import datetime
 import json
+from src.shared.domain.enums.groups_enum import GROUPS
 from src.shared.domain.enums.role_enum import ROLE
 from .create_user_viewmodel import CreateUserViewmodel
 from src.shared.domain.entities.user import User
@@ -42,6 +43,10 @@ class CreateUserController:
 
             if request.data.get('groups') is None:
                 raise MissingParameters('groups')
+                        
+            for group in request.data.get('groups'):
+                if group not in [g.value for g in GROUPS]:
+                    raise EntityError(f'groups')
 
             user_dict = {
                 'email': request.data.get('email').replace(' ', ''),

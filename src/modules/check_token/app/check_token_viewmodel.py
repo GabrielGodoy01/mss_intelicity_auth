@@ -21,7 +21,7 @@ class UserViewmodel:
             'email': self.email,
             'name': self.name,
             'role': self.role.value,
-            'groups': [group for group in self.groups],
+            'groups': [group.value for group in self.groups],
             'valid_token': True
         }
 

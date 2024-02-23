@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import List
 
 from src.shared.domain.entities.user import User
+from src.shared.domain.enums.groups_enum import GROUPS
 
 
 class IUserRepository(ABC):
@@ -19,5 +20,9 @@ class IUserRepository(ABC):
         pass
 
     @abstractmethod
-    def get_users_in_group(self, group_name: str) -> List[User]:
+    def get_users_in_group(self, group: GROUPS) -> List[User]:
+        pass
+
+    @abstractmethod
+    def update_user(self, user_email: str, kvp_to_update: dict, addGroups: List[GROUPS] = None, removeGroups: List[GROUPS] = None) -> User:
         pass

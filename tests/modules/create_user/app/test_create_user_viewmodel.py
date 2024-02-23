@@ -1,4 +1,4 @@
-from src.modules.create_user.app.create_user_viewmodel import CreateUserViewmodel
+from src.modules.create_user.app.create_user_viewmodel import CreateUserViewmodel, UserViewmodel
 from src.shared.domain.entities.user import User
 from src.shared.domain.enums.role_enum import ROLE
 
@@ -21,6 +21,21 @@ class Test_CreateUserViewmodel:
                 'groups': []
             },
             'message': 'Usuário foi criado com sucesso!'
+        }
+
+        assert viewmodel.to_dict() == expected
+
+    def test_user_viewmodel(self):
+        viewmodel = UserViewmodel(User(role=ROLE.INTELICITY,
+                name='Gabriel Godoy',
+                email='teste@gmail.com',
+                groups=[],))
+        
+        expected = {
+            'name': 'Gabriel Godoy',
+            'role': 'INTELICITY',
+            'email': 'teste@gmail.com',
+            'groups': [],
         }
 
         assert viewmodel.to_dict() == expected
