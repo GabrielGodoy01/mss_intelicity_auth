@@ -48,10 +48,7 @@ class UpdateUserController:
             )
 
             viewmodel = UpdateUserViewmodel(user)
-            print(user)
-            retorno = OK(viewmodel.to_dict())
-            print(user_data)
-            return retorno
+            return OK(viewmodel.to_dict())
         
         except MissingParameters as err:
             return BadRequest(body=f"Parâmetro ausente: {err.message}")
