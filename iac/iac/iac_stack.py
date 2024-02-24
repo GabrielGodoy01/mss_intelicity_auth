@@ -8,7 +8,7 @@ from aws_cdk import (
 )
 from constructs import Construct
 from .lambda_stack import LambdaStack
-from aws_cdk.aws_apigateway import RestApi, Cors
+from aws_cdk.aws_apigateway import RestApi, Cors, CognitoUserPoolsAuthorizer
 
 
 class IacStack(Stack):
@@ -31,6 +31,12 @@ class IacStack(Stack):
 
         else:
             stage = 'DEV'
+
+        self.cognito_auth = CognitoUserPoolsAuthorizer(self, f"auth_{self.github_ref_name}",
+                                                       cognito_user_pools=[aws_cognito.UserPool.from_user_pool_arn(
+                                                           self, f"authentication-{self.github_ref_name}",
+                                                       )]
+                                                       )
 
 
         self.rest_api = RestApi(self, f"AuthProfile_RestApi_{self.github_ref_name}",
@@ -57,7 +63,7 @@ class IacStack(Stack):
         }
 
         self.lambda_stack = LambdaStack(self, api_gateway_resource=api_gateway_resource,
-                                        environment_variables=ENVIRONMENT_VARIABLES)
+                                        environment_variables=ENVIRONMENT_VARIABLES, authorizer=self.cognito_auth)
         
         cognito_admin_policy = aws_iam.PolicyStatement(
             effect=aws_iam.Effect.ALLOW,

@@ -3,14 +3,14 @@ from aws_cdk import (
     Duration
 )
 from constructs import Construct
-from aws_cdk.aws_apigateway import Resource, LambdaIntegration
+from aws_cdk.aws_apigateway import Resource, LambdaIntegration, CognitoUserPoolsAuthorizer
 
 
 class LambdaStack(Construct):
     functions_that_need_cognito_permissions = []
 
     def create_lambda_api_gateway_integration(self, module_name: str, method: str, api_resource: Resource,
-                                              environment_variables: dict = {"STAGE": "TEST"}):
+                                              environment_variables: dict = {"STAGE": "TEST"}, authorizer=None):
 
         function = lambda_.Function(
             self, module_name.title(),
@@ -25,11 +25,12 @@ class LambdaStack(Construct):
 
         api_resource.add_resource(module_name.replace("_", "-")).add_method(method,
                                                                                        integration=LambdaIntegration(
-                                                                                           function))
+                                                                                           function), authorizer=authorizer)
 
         return function
 
-    def __init__(self, scope: Construct, api_gateway_resource: Resource, environment_variables: dict) -> None:
+    def __init__(self, scope: Construct, api_gateway_resource: Resource, environment_variables: dict,
+                 authorizer: CognitoUserPoolsAuthorizer) -> None:
         super().__init__(scope, "Auth_Lambda")
 
         self.lambda_layer = lambda_.LayerVersion(self, "Auth_Layer",
@@ -43,6 +44,7 @@ class LambdaStack(Construct):
             method="POST",
             api_resource=api_gateway_resource,
             environment_variables=environment_variables,
+            authorizer=authorizer
         )
 
         self.create_user = self.create_lambda_api_gateway_integration(
@@ -50,6 +52,7 @@ class LambdaStack(Construct):
             method="POST",
             api_resource=api_gateway_resource,
             environment_variables=environment_variables,
+            authorizer=authorizer
         )
 
         self.list_users_in_group = self.create_lambda_api_gateway_integration(
@@ -57,6 +60,7 @@ class LambdaStack(Construct):
             method="POST",
             api_resource=api_gateway_resource,
             environment_variables=environment_variables,
+            authorizer=authorizer
         )
 
         self.update_user = self.create_lambda_api_gateway_integration(
@@ -64,6 +68,7 @@ class LambdaStack(Construct):
             method="POST",
             api_resource=api_gateway_resource,
             environment_variables=environment_variables,
+            authorizer=authorizer
         )
 
         self.functions_that_need_cognito_permissions = [
