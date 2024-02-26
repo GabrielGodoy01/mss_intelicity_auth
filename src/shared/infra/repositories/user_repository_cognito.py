@@ -30,7 +30,7 @@ class UserRepositoryCognito(IUserRepository):
                 Username=email,
                 UserPoolId=self.user_pool_id
             )
-            groups = [GROUPS(group.get('GroupName')) for group in response.get('Groups')]
+            groups = [GROUPS[group.get('GroupName')] for group in response.get('Groups')]
             return groups
         except self.client.exceptions.UserNotFoundException as e:
             raise EntityError(e.response.get('Error').get('Message'))
