@@ -25,7 +25,7 @@ class LambdaStack(Construct):
 
         api_resource.add_resource(module_name.replace("_", "-")).add_method(method,
                                                                                        integration=LambdaIntegration(
-                                                                                           function), authorizer=authorizer)
+                                                                                           function))
 
         return function
 
