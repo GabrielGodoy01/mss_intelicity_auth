@@ -1,5 +1,5 @@
 from .update_user_usecase import UpdateUserUsecase
-from update_user_viewmodel import UpdateUserViewmodel
+from .update_user_viewmodel import UpdateUserViewmodel
 from src.shared.domain.enums.groups_enum import GROUPS
 from src.shared.helpers.errors.controller_errors import MissingParameters
 from src.shared.helpers.errors.domain_errors import EntityError
