@@ -97,17 +97,17 @@ class UserRepositoryCognito(IUserRepository):
             else:
                 raise ForbiddenAction(message=e.response.get('Error').get('Message'))
     
-    def get_users_in_group(self, group: str) -> List[User]:
+    def get_users_in_group(self, group: GROUPS) -> List[User]:
         try:
             users = []
             response = self.client.list_users_in_group(
                 UserPoolId=self.user_pool_id,
-                GroupName=group
+                GroupName=group.value
             )
 
             for user in response.get('Users'):
                 user = UserCognitoDTO.from_cognito(user).to_entity()
-                user.groups = [GROUPS(group)]
+                user.groups = [group]
                 users.append(user)
             
             return users
@@ -118,7 +118,7 @@ class UserRepositoryCognito(IUserRepository):
         except self.client.exceptions.InvalidParameterException as e:
             raise EntityError(e.response.get('Error').get('Message'))
     
-    def update_user(self, user_email: str, kvp_to_update: dict, addGroups: List[str] = None, removeGroups: List[str] = None) -> User:
+    def update_user(self, user_email: str, kvp_to_update: dict, addGroups: List[GROUPS] = None, removeGroups: List[GROUPS] = None) -> User:
         try:
 
             response = self.client.admin_update_user_attributes(
@@ -132,7 +132,7 @@ class UserRepositoryCognito(IUserRepository):
                     self.client.admin_add_user_to_group(
                         UserPoolId=self.user_pool_id,
                         Username=user_email,
-                        GroupName=group
+                        GroupName=group.value
                     )
             
             if removeGroups is not None:
@@ -140,7 +140,7 @@ class UserRepositoryCognito(IUserRepository):
                     self.client.admin_remove_user_from_group(
                         UserPoolId=self.user_pool_id,
                         Username=user_email,
-                        GroupName=group
+                        GroupName=group.value
                     )
 
             user = self.get_user_by_email(user_email)
