@@ -30,7 +30,7 @@ class LambdaStack(Construct):
         return function
 
     def __init__(self, scope: Construct, api_gateway_resource: Resource, environment_variables: dict,
-                 authorizer: CognitoUserPoolsAuthorizer) -> None:
+                 authorizer: CognitoUserPoolsAuthorizer = None) -> None:
         super().__init__(scope, "Auth_Lambda")
 
         self.lambda_layer = lambda_.LayerVersion(self, "Auth_Layer",
