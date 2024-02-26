@@ -8,10 +8,10 @@ from src.shared.domain.enums.role_enum import ROLE
 class UserCognitoDTO:
     name: str
     email: str
-    role: str
+    role: ROLE
     groups: List[GROUPS]
 
-    def __init__(self, email: str, name: str, role: str, groups: List[GROUPS] = []):
+    def __init__(self, email: str, name: str, role: ROLE, groups: List[GROUPS] = []):
         self.email = email
         self.name = name
         self.role = role
@@ -22,7 +22,7 @@ class UserCognitoDTO:
         return UserCognitoDTO(
             email=user.email,
             name=user.name,
-            role=user.role.value,
+            role=user.role,
             groups=user.groups
         )
 
@@ -50,18 +50,17 @@ class UserCognitoDTO:
         # user_data["enabled"] = f'{data.get("Enabled")}'
         # user_data["status"] = f'{data.get("UserStatus")}'
 
-
         return UserCognitoDTO(
             email=str(user_data["email"]),
             name=str(user_data["name"]),
-            role = ROLE(user_data.get("role")) if user_data.get("role") is not None else [],
+            role = ROLE[user_data.get("role")],
         )
 
     def to_entity(self) -> User:
         return User(
             email=self.email,
             name=self.name,
-            role=ROLE[self.role],
+            role=self.role,
             groups=self.groups
         )
     

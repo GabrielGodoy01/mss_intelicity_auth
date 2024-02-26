@@ -22,7 +22,7 @@ class ListUsersInGroupUsecase:
             raise ForbiddenAction("user")
 
         if group not in user_requester.groups:
-            raise ForbiddenAction("user não esta no grupo informado")
+            raise ForbiddenAction("user")
 
         users_response = self.repo.get_users_in_group(group=group)
 

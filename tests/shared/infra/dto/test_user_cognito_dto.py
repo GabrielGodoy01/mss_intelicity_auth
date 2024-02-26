@@ -17,7 +17,7 @@ class Test_UserCognitoDTO:
         user_cognito_dto_expected = UserCognitoDTO(
             email=user.email,
             name=user.name,
-            role=user.role.value,
+            role=user.role,
             groups=user.groups
         )
 
@@ -33,7 +33,7 @@ class Test_UserCognitoDTO:
         user_cognito_dto_expected = UserCognitoDTO(
             email=user.email,
             name=user.name,
-            role=user.role.value,
+            role=user.role,
             groups=user.groups
         )
         
@@ -82,7 +82,7 @@ class Test_UserCognitoDTO:
         user_cognito_dto = UserCognitoDTO(
             email = repo.users[0].email,
             name = repo.users[0].name,
-            role = repo.users[0].role.value,
+            role = repo.users[0].role,
             groups = repo.users[0].groups
         )
 
