@@ -1,5 +1,5 @@
-from src.modules.list_users_in_group.app.list_users_in_group_usecase import ListUsersInGroupUsecase
-from src.modules.list_users_in_group.app.list_users_in_group_viewmodel import ListUsersInGroupViewmodel
+from .list_users_in_group_usecase import ListUsersInGroupUsecase
+from .list_users_in_group_viewmodel import ListUsersInGroupViewmodel
 from src.shared.domain.enums.groups_enum import GROUPS
 from src.shared.helpers.errors.controller_errors import MissingParameters
 from src.shared.helpers.errors.domain_errors import EntityError

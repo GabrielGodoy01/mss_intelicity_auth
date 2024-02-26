@@ -1,5 +1,5 @@
-from src.modules.list_users_in_group.app.list_users_in_group_controller import ListUsersInGroupController
-from src.modules.list_users_in_group.app.list_users_in_group_usecase import ListUsersInGroupUsecase
+from .list_users_in_group_controller import ListUsersInGroupController
+from .list_users_in_group_usecase import ListUsersInGroupUsecase
 from src.shared.environments import Environments
 from src.shared.helpers.external_interfaces.http_lambda_requests import LambdaHttpRequest, LambdaHttpResponse
 
