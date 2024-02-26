@@ -45,6 +45,9 @@ class UpdateUserUsecase:
         add_groups = [group for group in groups if group not in old_user.groups]
         remove_groups = [group for group in old_user.groups if group not in groups]
 
+        add_groups = add_groups if add_groups else None
+        remove_groups = remove_groups if remove_groups else None
+
         user_response = self.repo.update_user(user_email=user_email, kvp_to_update=kvp_to_update, addGroups=add_groups, removeGroups=remove_groups)
 
         return user_response
