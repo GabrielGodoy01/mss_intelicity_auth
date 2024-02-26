@@ -24,6 +24,7 @@ class Test_UpdateUserController:
         assert response.status_code == 200
         assert response.body == {
             'user': {
+                'user_id': '1',
                 'name': 'Gabriel Godoy',
                 'role': 'USER',
                 'email': 'teste@gmail.com',

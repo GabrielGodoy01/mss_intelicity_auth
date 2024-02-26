@@ -7,7 +7,7 @@ class Test_CheckTokenViewmodel:
 
     def test_check_token_viewmodel(self):
         viewmodel = CheckTokenViewmodel(
-            user=User(role=ROLE.INTELICITY,
+            user=User(user_id="123",role=ROLE.INTELICITY,
             name='Gabriel Godoy',
             email='teste@gmail.com',
             groups=[],)
@@ -15,6 +15,7 @@ class Test_CheckTokenViewmodel:
 
         expected = {
             'user': {
+                'user_id': '123',
                 'name': 'Gabriel Godoy',
                 'role': 'INTELICITY',
                 'email': 'teste@gmail.com',

@@ -14,7 +14,7 @@ class Test_CreateUserController:
 
         request = HttpRequest(body={
             'name': 'Gabriel Godoy',
-            'email': 'teste@gmail.com',
+            'email': 'teste123@gmail.com',
             'role': 'INTELICITY',
             'groups': ['GAIA']
         }, headers=header)
@@ -24,9 +24,10 @@ class Test_CreateUserController:
         assert response.status_code == 201
         assert response.body == {
             'user': {
+                'user_id': '4',
                 'name': 'Gabriel Godoy',
                 'role': 'INTELICITY',
-                'email': 'teste@gmail.com',
+                'email': 'teste123@gmail.com',
                 'groups': ['GAIA']
             }, 
             'message': 'Usuário foi criado com sucesso!'

@@ -7,7 +7,7 @@ class Test_CreateUserViewmodel:
 
     def test_check_token_viewmodel(self):
         viewmodel = CreateUserViewmodel(
-            user=User(role=ROLE.INTELICITY,
+            user=User(user_id="123",role=ROLE.INTELICITY,
             name='Gabriel Godoy',
             email='teste@gmail.com',
             groups=[],)
@@ -15,6 +15,7 @@ class Test_CreateUserViewmodel:
 
         expected = {
             'user': {
+                'user_id': '123',
                 'name': 'Gabriel Godoy',
                 'role': 'INTELICITY',
                 'email': 'teste@gmail.com',
@@ -26,12 +27,13 @@ class Test_CreateUserViewmodel:
         assert viewmodel.to_dict() == expected
 
     def test_user_viewmodel(self):
-        viewmodel = UserViewmodel(User(role=ROLE.INTELICITY,
+        viewmodel = UserViewmodel(User(user_id="123",role=ROLE.INTELICITY,
                 name='Gabriel Godoy',
                 email='teste@gmail.com',
                 groups=[],))
         
         expected = {
+            'user_id': '123',
             'name': 'Gabriel Godoy',
             'role': 'INTELICITY',
             'email': 'teste@gmail.com',

@@ -4,12 +4,14 @@ from src.shared.domain.enums.groups_enum import GROUPS
 from src.shared.domain.enums.role_enum import ROLE
 
 class UserViewmodel:
+    user_id: str
     email: str
     name: str
     role: ROLE
     groups: List[GROUPS]
 
-    def __init__(self, email: str, name: str, role: ROLE, groups: List[GROUPS]):
+    def __init__(self, user_id: str, email: str, name: str, role: ROLE, groups: List[GROUPS]):
+        self.user_id = user_id
         self.email = email
         self.name = name
         self.role = role
@@ -18,6 +20,7 @@ class UserViewmodel:
 
     def to_dict(self):
         return {
+            'user_id': self.user_id,
             'email': self.email,
             'name': self.name,
             'role': self.role.value,
@@ -29,7 +32,7 @@ class CheckTokenViewmodel():
     user: UserViewmodel
 
     def __init__(self, user: User):
-        self.user = UserViewmodel(email=user.email,name=user.name, role=user.role, groups=user.groups)
+        self.user = UserViewmodel(user_id=user.user_id, email=user.email,name=user.name, role=user.role, groups=user.groups)
 
     def to_dict(self):
         return {

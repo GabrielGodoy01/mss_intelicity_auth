@@ -19,6 +19,7 @@ class Test_CheckTokenController:
         assert response.status_code == 200
         assert response.body == {
             'user': {
+                'user_id': '1',
                 'name': 'Gabriel Godoy',
                 'role': 'INTELICITY',
                 'email': 'teste@gmail.com',

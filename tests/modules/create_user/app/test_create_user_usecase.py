@@ -34,10 +34,12 @@ class Test_CreateUseUsecase:
     def test_create_user_usecase_with_user_not_admin(self):
         repo = UserRepositoryMock()
         usecase = CreateUserUsecase(repo)
-        user = User(role=ROLE.INTELICITY,
+        user = User(
+            role=ROLE.INTELICITY,
             name='Gabriel Godoy',
             email='teste@gmail.com',
-            groups=[],)
+            groups=[],
+        )
     
         with pytest.raises(ForbiddenAction):
             usecase(user_to_create=user, access_token="valid_access_token-teste3@gmail.com")

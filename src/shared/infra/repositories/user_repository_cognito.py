@@ -70,7 +70,7 @@ class UserRepositoryCognito(IUserRepository):
                     GroupName=group.value
                 )
                 
-            return user
+            return self.get_user_by_email(user.email)
 
         except self.client.exceptions.UsernameExistsException:
             raise DuplicatedItem("user")

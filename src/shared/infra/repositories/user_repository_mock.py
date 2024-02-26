@@ -13,14 +13,15 @@ class UserRepositoryMock(IUserRepository):
 
     def __init__(self):
         self.users = [
-            User(email='teste@gmail.com', name='Gabriel Godoy', role=ROLE.INTELICITY, groups=[GROUPS.GAIA]),
-            User(email='teste2@gmail.com', name='Gabriel Godoy', role=ROLE.INTELICITY),
-            User(email='teste3@gmail.com', name='Gabriel Godoy', role=ROLE.USER),
+            User(user_id="1", email='teste@gmail.com', name='Gabriel Godoy', role=ROLE.INTELICITY, groups=[GROUPS.GAIA]),
+            User(user_id="2", email='teste2@gmail.com', name='Gabriel Godoy', role=ROLE.INTELICITY),
+            User(user_id="3",email='teste3@gmail.com', name='Gabriel Godoy', role=ROLE.USER),
         ]
 
     def create_user(self, new_user: User) -> User:
+        new_user.user_id = str(len(self.users) + 1)
         self.users.append(new_user)
-        return new_user
+        return self.get_user_by_email(new_user.email)
     
     def get_user_by_email(self, email: str) -> User:
         for userx in self.users:

@@ -21,7 +21,11 @@ class Test_UserRepositoryMock:
 
         assert len(repo.users) == 4
         assert type(user) == User
-        assert repo.users[-1] == user
+        assert repo.users[-1].user_id == '4'
+        assert repo.users[-1].email == 'teste3@gmail.com'
+        assert repo.users[-1].name == 'Gabriel Godoy'
+        assert repo.users[-1].role == ROLE.INTELICITY
+        assert repo.users[-1].groups == []
 
     def test_check_token(self):
         repo = UserRepositoryMock()

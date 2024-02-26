@@ -5,12 +5,14 @@ from src.shared.domain.enums.role_enum import ROLE
 
 
 class UserViewmodel:
+    user_id: str
     name: str
     email: str
     role: ROLE
     groups: List[GROUPS]
 
     def __init__(self, user: User):
+        self.user_id = user.user_id
         self.name = user.name
         self.email = user.email
         self.role = user.role
@@ -18,6 +20,7 @@ class UserViewmodel:
 
     def to_dict(self):
         return {
+            'user_id': self.user_id,
             'name': self.name,
             'email': self.email,
             'role': self.role.value,

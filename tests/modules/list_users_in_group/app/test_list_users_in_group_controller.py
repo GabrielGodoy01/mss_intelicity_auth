@@ -22,6 +22,7 @@ class Test_ListUsersInGroupController:
         assert response.body == {
             'users': [
                 {
+                    'user_id': '1',
                     'name': 'Gabriel Godoy',
                     'role': 'INTELICITY',
                     'email': 'teste@gmail.com',

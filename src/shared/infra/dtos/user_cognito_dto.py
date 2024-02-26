@@ -6,12 +6,14 @@ from src.shared.domain.enums.role_enum import ROLE
 
 
 class UserCognitoDTO:
+    user_id: str
     name: str
     email: str
     role: ROLE
     groups: List[GROUPS]
 
-    def __init__(self, email: str, name: str, role: ROLE, groups: List[GROUPS] = []):
+    def __init__(self, user_id: str, email: str, name: str, role: ROLE, groups: List[GROUPS] = []):
+        self.user_id = user_id
         self.email = email
         self.name = name
         self.role = role
@@ -20,6 +22,7 @@ class UserCognitoDTO:
     @staticmethod
     def from_entity(user: User):
         return UserCognitoDTO(
+            user_id=user.user_id,
             email=user.email,
             name=user.name,
             role=user.role,
@@ -32,13 +35,14 @@ class UserCognitoDTO:
         "role": "custom:general_role",
     }
 
+    FROM_COGNITO_DICT = {value: key for key, value in TO_COGNITO_DICT.items()}
+    FROM_COGNITO_DICT["sub"] = "user_id"
+
     def to_cognito_attributes(self) -> List[dict]:
         user_attributes = [self.parse_attribute(value=getattr(self, att), name=self.TO_COGNITO_DICT[att]) for att in self.TO_COGNITO_DICT]
         user_attributes = [att for att in user_attributes if att["Value"] != str(None)]
 
         return user_attributes
-
-    FROM_COGNITO_DICT = {value: key for key, value in TO_COGNITO_DICT.items()}
     
     @staticmethod
     def from_cognito(data: dict) -> "UserCognitoDTO":
@@ -51,6 +55,7 @@ class UserCognitoDTO:
         # user_data["status"] = f'{data.get("UserStatus")}'
 
         return UserCognitoDTO(
+            user_id=str(user_data["user_id"]),
             email=str(user_data["email"]),
             name=str(user_data["name"]),
             role = ROLE[user_data.get("role")],
@@ -58,6 +63,7 @@ class UserCognitoDTO:
 
     def to_entity(self) -> User:
         return User(
+            user_id=self.user_id,
             email=self.email,
             name=self.name,
             role=self.role,

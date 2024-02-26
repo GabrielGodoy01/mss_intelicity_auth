@@ -8,13 +8,18 @@ from src.shared.helpers.errors.domain_errors import EntityError
 
 
 class User(abc.ABC):
+    user_id: str = None
     name: str
     email: str
     role: ROLE
     groups: List[GROUPS]
     MIN_NAME_LENGTH = 2
 
-    def __init__(self, name: str, email: str, role: ROLE, groups: List[GROUPS] = []):
+    def __init__(self, name: str, email: str, role: ROLE, groups: List[GROUPS] = [], user_id: str = None):
+        if type(user_id) != str and user_id is not None:
+            raise EntityError("user_id")
+        self.user_id = user_id
+        
         if not User.validate_name(name):
             raise EntityError("name")
         self.name = name
@@ -34,6 +39,7 @@ class User(abc.ABC):
     @staticmethod
     def parse_object(user: dict) -> 'User':
         return User(
+            user_id=user['user_id'] if 'user_id' in user else None,
             email=user['email'],
             name=user['name'].title(),
             role=ROLE[user['role']],
@@ -64,6 +70,7 @@ class User(abc.ABC):
 
     def to_dict(self) -> dict:
         return {
+            'user_id': self.user_id,
             'email': self.email,
             'name': self.name,
             'role': self.role.value,
@@ -71,4 +78,4 @@ class User(abc.ABC):
         }
 
     def __repr__(self):
-        return f"User(name={self.name}, email={self.email}, role={self.role}, groups={self.groups})"
+        return f"User(user_id={self.user_id}, name={self.name}, email={self.email}, role={self.role}, groups={self.groups})"

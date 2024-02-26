@@ -6,12 +6,13 @@ from src.shared.domain.enums.role_enum import ROLE
 class Test_ListUsersInGroupViewmodel:
 
     def test_user_viewmodel(self):
-        viewmodel = UserViewmodel(User(role=ROLE.INTELICITY,
+        viewmodel = UserViewmodel(User(user_id="123",role=ROLE.INTELICITY,
                 name='Gabriel Godoy',
                 email='teste@gmail.com',
                 groups=[],))
         
         expected = {
+            'user_id': '123',
             'name': 'Gabriel Godoy',
             'role': 'INTELICITY',
             'email': 'teste@gmail.com',
@@ -23,7 +24,7 @@ class Test_ListUsersInGroupViewmodel:
     def test_list_users_in_group_viewmodel(self):
         viewmodel = ListUsersInGroupViewmodel(
             users=[
-                User(role=ROLE.INTELICITY,
+                User(user_id="123",role=ROLE.INTELICITY,
                 name='Gabriel Godoy',
                 email='teste@gmail.com',
                 groups=[],)
@@ -31,6 +32,7 @@ class Test_ListUsersInGroupViewmodel:
         
         expected = {
             'users': [{
+                'user_id': '123',
                 'name': 'Gabriel Godoy',
                 'role': 'INTELICITY',
                 'email': 'teste@gmail.com',
