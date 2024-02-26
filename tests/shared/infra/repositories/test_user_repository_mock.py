@@ -1,3 +1,4 @@
+from typing import Tuple
 from src.shared.domain.entities.user import User
 from src.shared.domain.enums.groups_enum import GROUPS
 from src.shared.domain.enums.role_enum import ROLE
@@ -50,3 +51,11 @@ class Test_UserRepositoryMock:
         assert type(user) == User
         assert user.role == ROLE.USER
         assert user.groups == [GROUPS.TEST]
+    
+    def test_refresh_token(self):
+        repo = UserRepositoryMock()
+        resp = repo.refresh_token(
+            refresh_token="valid_refresh_token-teste@gmail.com")
+        assert resp[0] == 'valid_access_token-teste@gmail.com'
+        assert resp[1] == 'valid_refresh_token-teste@gmail.com'
+        assert resp[2] == 'valid_id_token-teste@gmail.com'

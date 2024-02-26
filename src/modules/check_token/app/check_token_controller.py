@@ -14,12 +14,14 @@ class CheckTokenController:
     def __call__(self, req: IRequest) -> IResponse:
         try:
             if req.headers.get('Authorization') is None:
-                raise MissingParameters('Authorization')
+                raise MissingParameters('Authorization header')
             
             token = req.headers.get('Authorization').split(' ')
+
             if len(token) != 2 or token[0] != 'Bearer':
                 return BadRequest('Token Inválido')
             access_token = token[1]
+
             user = self.checkTokenUsecase(access_token)
             viewmodel = CheckTokenViewmodel(user)
             return OK(viewmodel.to_dict())

@@ -26,7 +26,7 @@ class CreateUserController:
             token = request.data.get('Authorization').split(' ')
 
             if len(token) != 2 or token[0] != 'Bearer':
-                raise EntityError('access_token')
+                raise EntityError('Token Inválido')
             access_token = token[1]
 
             if request.data.get('role') is None:

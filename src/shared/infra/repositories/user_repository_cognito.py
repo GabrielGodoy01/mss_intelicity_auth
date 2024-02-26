@@ -149,3 +149,24 @@ class UserRepositoryCognito(IUserRepository):
 
         except self.client.exceptions.InvalidParameterException as e:
             raise EntityError(e.response.get('Error').get('Message'))
+    
+    def refresh_token(self, refresh_token: str) -> Tuple[str, str, str]:
+        try:
+            response = self.client.initiate_auth(
+                ClientId=self.client_id,
+                AuthFlow='REFRESH_TOKEN_AUTH',
+                AuthParameters={
+                    'REFRESH_TOKEN': refresh_token
+                }
+            )
+
+            id_token = response["AuthenticationResult"]["IdToken"]
+            access_token = response["AuthenticationResult"]["AccessToken"]
+
+            return access_token, refresh_token, id_token
+        except ClientError as e:
+            errorCode = e.response.get('Error').get('Code')
+            if errorCode == 'NotAuthorizedException':
+                raise InvalidCredentials(message="Token inválido ou expirado")
+            else:
+                raise ForbiddenAction(message=e.response.get('Error').get('Message'))

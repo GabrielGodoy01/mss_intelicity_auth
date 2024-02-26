@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 from src.shared.domain.entities.user import User
 from src.shared.domain.enums.groups_enum import GROUPS
@@ -69,3 +69,14 @@ class UserRepositoryMock(IUserRepository):
                 return userx
 
         return None
+
+    def refresh_token(self, refresh_token: str) -> Tuple[str, str, str]:
+        split_token = refresh_token.split("-")  # token, email
+        if len(split_token) != 2:
+            return None, None
+        if split_token[0] != "valid_refresh_token":
+            return None, None
+        if self.get_user_by_email(split_token[1]) is None:
+            return None, None
+        tokens = "valid_access_token-" + split_token[1], refresh_token, "valid_id_token-" + split_token[1]
+        return tokens
