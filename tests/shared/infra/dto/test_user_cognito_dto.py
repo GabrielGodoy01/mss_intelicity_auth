@@ -81,6 +81,23 @@ class Test_UserCognitoDTO:
         assert user_cognito_dto.email == expected_dto.email
         assert user_cognito_dto.name == expected_dto.name
         assert user_cognito_dto.role == expected_dto.role
+    
+    def test_to_cognito_attributes(self):
+        user_cognito_dto = UserCognitoDTO(
+            user_id="123",
+            email="joao@hotmail.com",
+            name="joao",
+            role=ROLE.INTELICITY,
+        )
+        cognito = user_cognito_dto.to_cognito_attributes()
+
+        assert cognito[0]['Name'] == 'email'
+        assert cognito[0]['Value'] == 'joao@hotmail.com'
+        assert cognito[1]['Name'] == 'name'
+        assert cognito[1]['Value'] == 'joao'
+        assert cognito[2]['Name'] == 'custom:general_role'
+        assert cognito[2]['Value'] == 'INTELICITY'
+        assert len(cognito) == 3
 
 
     def test_to_entity(self):

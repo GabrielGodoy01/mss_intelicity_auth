@@ -39,7 +39,13 @@ class UserCognitoDTO:
     FROM_COGNITO_DICT["sub"] = "user_id"
 
     def to_cognito_attributes(self) -> List[dict]:
-        user_attributes = [self.parse_attribute(value=getattr(self, att), name=self.TO_COGNITO_DICT[att]) for att in self.TO_COGNITO_DICT]
+        user_attributes = []
+        for att, name in self.TO_COGNITO_DICT.items():
+            value = getattr(self, att)
+            if isinstance(value, Enum):  # Verifica se é um enum
+                value = value.value  # Obtém o valor do enum
+            user_attributes.append(self.parse_attribute(value=value, name=name))
+        
         user_attributes = [att for att in user_attributes if att["Value"] != str(None)]
 
         return user_attributes
