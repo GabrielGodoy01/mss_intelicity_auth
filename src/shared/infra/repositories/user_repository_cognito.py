@@ -23,6 +23,17 @@ class UserRepositoryCognito(IUserRepository):
         self.client = boto3.client('cognito-idp', region_name=Environments.get_envs().region)
         self.user_pool_id = Environments.get_envs().user_pool_id
         self.client_id = Environments.get_envs().client_id
+    
+    def get_groups_for_user(self, email: str) -> List[GROUPS]:
+        try:
+            response = self.client.admin_list_groups_for_user(
+                Username=email,
+                UserPoolId=self.user_pool_id
+            )
+            groups = [GROUPS(group.get('GroupName')) for group in response.get('Groups')]
+            return groups
+        except self.client.exceptions.UserNotFoundException as e:
+            raise EntityError(e.response.get('Error').get('Message'))
 
     
     def get_user_by_email(self, email: str) -> User:
@@ -35,13 +46,7 @@ class UserRepositoryCognito(IUserRepository):
                 return None
 
             user = UserCognitoDTO.from_cognito(response).to_entity()
-            groupResponse = self.client.admin_list_groups_for_user(
-                Username=user.email,
-                UserPoolId=self.user_pool_id,
-            )
-
-            for group in groupResponse.get('Groups'):
-                user.groups.append(GROUPS(group.get('GroupName')))
+            user.groups = self.get_groups_for_user(email)
                 
             return user
 
@@ -81,14 +86,7 @@ class UserRepositoryCognito(IUserRepository):
 
             user = UserCognitoDTO.from_cognito(userResponse).to_entity()
 
-            groupResponse = self.client.admin_list_groups_for_user(
-                Username=user.email,
-                UserPoolId=self.user_pool_id,
-            )
-
-            for group in groupResponse.get('Groups'):
-                user.groups.append(GROUPS(group.get('GroupName')))
-
+            user.groups = self.get_groups_for_user(user.email)
             return user
         except ClientError as e:
             error_code = e.response.get('Error').get('Code')
@@ -129,23 +127,41 @@ class UserRepositoryCognito(IUserRepository):
 
             if addGroups is not None:
                 for group in addGroups:
-                    self.client.admin_add_user_to_group(
-                        UserPoolId=self.user_pool_id,
-                        Username=user_email,
-                        GroupName=group.value
-                    )
+                    self.add_user_to_group(user_email, group)
             
             if removeGroups is not None:
                 for group in removeGroups:
-                    self.client.admin_remove_user_from_group(
-                        UserPoolId=self.user_pool_id,
-                        Username=user_email,
-                        GroupName=group.value
-                    )
+                    self.remove_user_from_group(user_email, group)
 
             user = self.get_user_by_email(user_email)
 
             return user
+
+        except self.client.exceptions.InvalidParameterException as e:
+            raise EntityError(e.response.get('Error').get('Message'))
+    
+    def add_user_to_group(self, user_email: str, group: GROUPS) -> None:
+        try:
+            self.client.admin_add_user_to_group(
+                UserPoolId=self.user_pool_id,
+                Username=user_email,
+                GroupName=group.value
+            )
+        except self.client.exceptions.ResourceNotFoundException as e:
+            raise EntityError(e.response.get('Error').get('Message'))
+
+        except self.client.exceptions.InvalidParameterException as e:
+            raise EntityError(e.response.get('Error').get('Message'))
+    
+    def remove_user_from_group(self, user_email: str, group: GROUPS) -> None:
+        try:
+            self.client.admin_remove_user_from_group(
+                UserPoolId=self.user_pool_id,
+                Username=user_email,
+                GroupName=group.value
+            )
+        except self.client.exceptions.ResourceNotFoundException as e:
+            raise EntityError(e.response.get('Error').get('Message'))
 
         except self.client.exceptions.InvalidParameterException as e:
             raise EntityError(e.response.get('Error').get('Message'))

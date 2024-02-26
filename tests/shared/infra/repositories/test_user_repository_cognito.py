@@ -13,3 +13,8 @@ class Test_UserRepositoryCognito:
     def test_list_groups(self):
         repo = UserRepositoryCognito()
         repo.get_users_in_group(GROUPS.GAIA)
+
+    @pytest.mark.skip("Can't test it locally")
+    def test_get_user_by_email(self):
+        repo = UserRepositoryCognito()
+        repo.get_user_by_email("teste1234@gmail.com")
