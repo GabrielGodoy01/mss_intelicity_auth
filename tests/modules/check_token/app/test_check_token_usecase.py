@@ -20,12 +20,12 @@ class Test_CheckTokenUsecase:
 
         assert user.role == ROLE.INTELICITY
 
-    def test_check_token_usecase_invalid_token(self):
+    def test_check_token_usecase_invalid_email(self):
         repo = UserRepositoryMock()
         usecase = CheckTokenUsecase(repo)
 
         invalid_email = 'etset@gmail.com'
         access_token = f'valid_access_token-{invalid_email}'
 
-        with pytest.raises(ForbiddenAction):
+        with pytest.raises(NoItemsFound):
             usecase(access_token)

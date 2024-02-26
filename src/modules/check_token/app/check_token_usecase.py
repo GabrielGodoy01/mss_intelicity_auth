@@ -1,6 +1,6 @@
 from src.shared.domain.entities.user import User
 from src.shared.domain.repositories.user_repository_interface import IUserRepository
-from src.shared.helpers.errors.usecase_errors import ForbiddenAction
+from src.shared.helpers.errors.usecase_errors import ForbiddenAction, NoItemsFound
 
 
 class CheckTokenUsecase:
@@ -13,6 +13,6 @@ class CheckTokenUsecase:
         user = self.repo.check_token(token)
 
         if not user:
-            raise ForbiddenAction('Invalid Token')
+            raise NoItemsFound('Usuário não encontrado')
 
         return user

@@ -38,4 +38,4 @@ class Test_CheckTokenController:
 
         response = controller(request)
         assert response.status_code == 400
-        assert response.body["message"] == 'Parâmetro inválido: access_token'
+        assert response.body == 'Parâmetro inválido: access_token'

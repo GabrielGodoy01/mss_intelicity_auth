@@ -18,7 +18,7 @@ class UpdateUserUsecase:
         user_requester = self.repo.check_token(access_token)
 
         if user_requester is None:
-            raise NoItemsFound("admin not found")
+            raise NoItemsFound("Usuário não encontrado")
         
         if user_requester.role != ROLE.INTELICITY and user_requester.role != ROLE.ADMIN:
             raise ForbiddenAction("user")

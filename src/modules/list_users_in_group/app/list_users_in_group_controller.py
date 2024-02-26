@@ -3,7 +3,7 @@ from src.modules.list_users_in_group.app.list_users_in_group_viewmodel import Li
 from src.shared.domain.enums.groups_enum import GROUPS
 from src.shared.helpers.errors.controller_errors import MissingParameters
 from src.shared.helpers.errors.domain_errors import EntityError
-from src.shared.helpers.errors.usecase_errors import InvalidCredentials
+from src.shared.helpers.errors.usecase_errors import InvalidCredentials, NoItemsFound
 from src.shared.helpers.external_interfaces.external_interface import IRequest, IResponse
 from src.shared.helpers.external_interfaces.http_codes import OK, BadRequest, InternalServerError
 
@@ -20,7 +20,7 @@ class ListUsersInGroupController:
             token = request.data.get('Authorization').split(' ')
 
             if len(token) != 2 or token[0] != 'Bearer':
-                raise EntityError('Token Inválido')
+                raise EntityError('Token')
             access_token = token[1]
 
             if request.data.get('group') is None:
@@ -43,6 +43,9 @@ class ListUsersInGroupController:
 
         except EntityError as err:
             return BadRequest(body=f"Parâmetro inválido: {err.message}")
+        
+        except NoItemsFound as err:
+            return BadRequest(body=f"Usuário não encontrado: {err.message}")
         
         except Exception as err:
             return InternalServerError(body=err.args[0])
