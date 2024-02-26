@@ -62,16 +62,16 @@ class UserRepositoryCognito(IUserRepository):
                 self.client.admin_add_user_to_group(
                     UserPoolId=self.user_pool_id,
                     Username=user.email,
-                    GroupName=group
+                    GroupName=group.value
                 )
+                
+            return user
 
         except self.client.exceptions.UsernameExistsException:
             raise DuplicatedItem("user")
 
         except self.client.exceptions.InvalidParameterException as e:
             raise EntityError(e.response.get('Error').get('Message'))
-
-        return user
     
     def check_token(self, token: str) -> User:
         try:
