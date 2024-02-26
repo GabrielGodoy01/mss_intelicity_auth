@@ -29,7 +29,7 @@ class ListUsersInGroupController:
             if request.data.get('group') not in [g.value for g in GROUPS]:
                     raise EntityError('group')
             
-            list_users = self.listUsersInGroupUsecase(group=GROUPS(request.data.get('group')), access_token=access_token)
+            list_users = self.listUsersInGroupUsecase(group=GROUPS[request.data.get('group')], access_token=access_token)
 
             viewmodel = ListUsersInGroupViewmodel(users=list_users)
 
