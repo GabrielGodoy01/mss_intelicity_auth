@@ -10,7 +10,7 @@ class LambdaStack(Construct):
     functions_that_need_cognito_permissions = []
 
     def create_lambda_api_gateway_integration(self, module_name: str, method: str, api_resource: Resource,
-                                              environment_variables: dict = {"STAGE": "TEST"}, authorizer=None):
+                                              environment_variables: dict = {"STAGE": "TEST"}):
 
         function = lambda_.Function(
             self, module_name.title(),
@@ -29,8 +29,7 @@ class LambdaStack(Construct):
 
         return function
 
-    def __init__(self, scope: Construct, api_gateway_resource: Resource, environment_variables: dict,
-                 authorizer: CognitoUserPoolsAuthorizer = None) -> None:
+    def __init__(self, scope: Construct, api_gateway_resource: Resource, environment_variables: dict) -> None:
         super().__init__(scope, "Auth_Lambda")
 
         self.lambda_layer = lambda_.LayerVersion(self, "Auth_Layer",
