@@ -22,6 +22,7 @@ class IacStack(Stack):
         self.aws_region = os.environ.get("AWS_REGION")
         self.user_pool_name = os.environ.get("USER_POOL_NAME")
         self.user_pool_id = os.environ.get("USER_POOL_ID")
+        self.app_client_id = os.environ.get("APP_CLIENT_ID")
 
         if 'prod' in self.github_ref_name:
             stage = 'PROD'
@@ -59,7 +60,8 @@ class IacStack(Stack):
         ENVIRONMENT_VARIABLES = {
             "STAGE": stage,
             "USER_POOL_ID":  self.user_pool_id,
-            "USER_POOL_NAME": self.user_pool_name
+            "USER_POOL_NAME": self.user_pool_name,
+            "APP_CLIENT_ID": self.app_client_id,
         }
 
         self.lambda_stack = LambdaStack(self, api_gateway_resource=api_gateway_resource,
