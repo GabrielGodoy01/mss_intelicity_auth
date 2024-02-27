@@ -3,9 +3,9 @@ from .list_users_in_group_viewmodel import ListUsersInGroupViewmodel
 from src.shared.domain.enums.groups_enum import GROUPS
 from src.shared.helpers.errors.controller_errors import MissingParameters
 from src.shared.helpers.errors.domain_errors import EntityError
-from src.shared.helpers.errors.usecase_errors import InvalidCredentials, NoItemsFound
+from src.shared.helpers.errors.usecase_errors import InvalidCredentials, InvalidTokenError, NoItemsFound
 from src.shared.helpers.external_interfaces.external_interface import IRequest, IResponse
-from src.shared.helpers.external_interfaces.http_codes import OK, BadRequest, InternalServerError
+from src.shared.helpers.external_interfaces.http_codes import OK, BadRequest, InternalServerError, Unauthorized
 
 
 class ListUsersInGroupController:
@@ -46,6 +46,9 @@ class ListUsersInGroupController:
         
         except NoItemsFound as err:
             return BadRequest(body=f"Usuário não encontrado: {err.message}")
+        
+        except InvalidTokenError as err:
+            return Unauthorized(body="Token inválido ou expirado")
         
         except Exception as err:
             return InternalServerError(body=err.args[0])

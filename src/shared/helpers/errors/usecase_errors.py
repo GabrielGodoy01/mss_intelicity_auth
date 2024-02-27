@@ -15,3 +15,7 @@ class ForbiddenAction(BaseError):
 class InvalidCredentials(BaseError):
     def __init__(self, message: str):
         super().__init__(message)
+
+class InvalidTokenError(BaseError):
+    def __init__(self, message: str):
+        super().__init__(message)

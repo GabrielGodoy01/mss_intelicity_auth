@@ -9,7 +9,7 @@ from src.shared.domain.enums.groups_enum import GROUPS
 from src.shared.domain.repositories.user_repository_interface import IUserRepository
 from src.shared.environments import Environments
 from src.shared.helpers.errors.domain_errors import EntityError
-from src.shared.helpers.errors.usecase_errors import DuplicatedItem, ForbiddenAction, InvalidCredentials
+from src.shared.helpers.errors.usecase_errors import DuplicatedItem, ForbiddenAction, InvalidCredentials, InvalidTokenError
 from src.shared.infra.dtos.user_cognito_dto import UserCognitoDTO
 
 
@@ -91,7 +91,7 @@ class UserRepositoryCognito(IUserRepository):
         except ClientError as e:
             error_code = e.response.get('Error').get('Code')
             if error_code == 'NotAuthorizedException':
-                raise InvalidCredentials(message="Token inválido ou expirado")
+                raise InvalidTokenError(message="Token inválido ou expirado")
             else:
                 raise ForbiddenAction(message=e.response.get('Error').get('Message'))
     
@@ -183,6 +183,6 @@ class UserRepositoryCognito(IUserRepository):
         except ClientError as e:
             errorCode = e.response.get('Error').get('Code')
             if errorCode == 'NotAuthorizedException':
-                raise InvalidCredentials(message="Token inválido ou expirado")
+                raise InvalidTokenError(message="token")
             else:
                 raise ForbiddenAction(message=e.response.get('Error').get('Message'))
