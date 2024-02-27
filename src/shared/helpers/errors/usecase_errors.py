@@ -10,7 +10,7 @@ class DuplicatedItem(BaseError):
         
 class ForbiddenAction(BaseError):
     def __init__(self, message: str):
-        super().__init__(f'That action is forbidden for this {message}')
+        super().__init__(message)
 
 class InvalidCredentials(BaseError):
     def __init__(self, message: str):
