@@ -1,4 +1,3 @@
-from pytz import InvalidTimeError
 from src.modules.refresh_token.app.refresh_token_usecase import RefreshTokenUsecase
 from src.modules.refresh_token.app.refresh_token_viewmodel import RefreshTokenViewmodel
 from src.shared.helpers.errors.controller_errors import MissingParameters
@@ -43,9 +42,6 @@ class RefreshTokenController:
 
         except EntityError as err:
             return BadRequest(body=f"Parâmetro inválido: {err.message}")
-
-        except InvalidTimeError as err:
-            return BadRequest(body=f"Token inválido, favor fazer login novamente")
 
         except Exception as err:
             return InternalServerError(body=err.args[0])
