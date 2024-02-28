@@ -55,6 +55,11 @@ class UserRepositoryCognito(IUserRepository):
     
     def create_user(self, user: User) -> User:
         cognito_attributes = UserCognitoDTO.from_entity(user).to_cognito_attributes()
+        cognito_attributes.append({
+            "Name": "email_verified",
+            "Value": "True"
+        })
+
         try:
 
             self.client.admin_create_user(
