@@ -105,7 +105,7 @@ class UserRepositoryCognito(IUserRepository):
 
             for user in response.get('Users'):
                 user = UserCognitoDTO.from_cognito(user).to_entity()
-                user.groups = [group]
+                user.groups = self.get_groups_for_user(user.email)
                 users.append(user)
             
             return users
