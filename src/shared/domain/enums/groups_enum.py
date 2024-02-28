@@ -3,4 +3,4 @@ from enum import Enum
 
 class GROUPS(Enum):
     GAIA = "GAIA"
-    TEST = "TEST"
+    JUNDIAI = "JUNDIAI"

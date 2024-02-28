@@ -49,12 +49,12 @@ class Test_UserRepositoryMock:
     
     def test_update_user(self):
         repo = UserRepositoryMock()
-        user = repo.update_user(user_email='teste@gmail.com', kvp_to_update={'role': ROLE.USER}, addGroups=[GROUPS.TEST], removeGroups=[GROUPS.GAIA])
+        user = repo.update_user(user_email='teste@gmail.com', kvp_to_update={'role': ROLE.USER}, addGroups=[GROUPS.JUNDIAI], removeGroups=[GROUPS.GAIA])
 
         assert user.email == 'teste@gmail.com'
         assert type(user) == User
         assert user.role == ROLE.USER
-        assert user.groups == [GROUPS.TEST]
+        assert user.groups == [GROUPS.JUNDIAI]
     
     def test_refresh_token(self):
         repo = UserRepositoryMock()

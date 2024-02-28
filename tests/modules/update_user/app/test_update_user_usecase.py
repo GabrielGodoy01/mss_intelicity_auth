@@ -15,11 +15,11 @@ class Test_UpdateUserUsecase:
         user_response = usecase(new_user_data={
                 'name': 'Gabriel Godoy 01',
                 'role': 'USER',
-            }, user_email='teste@gmail.com', groups=[GROUPS.GAIA, GROUPS.TEST], access_token="valid_access_token-teste@gmail.com")
+            }, user_email='teste@gmail.com', groups=[GROUPS.GAIA, GROUPS.JUNDIAI], access_token="valid_access_token-teste@gmail.com")
         
         assert user_response.email == 'teste@gmail.com'
         assert user_response.role == ROLE.USER
-        assert user_response.groups == [GROUPS.GAIA, GROUPS.TEST]
+        assert user_response.groups == [GROUPS.GAIA, GROUPS.JUNDIAI]
         assert user_response.name == 'Gabriel Godoy 01'
     
     def test_update_user_usecase_admin_not_found(self):
@@ -30,7 +30,7 @@ class Test_UpdateUserUsecase:
             usecase(new_user_data={
                     'name': 'Gabriel Godoy 01',
                     'role': 'USER',
-            }, user_email='teste@gmail.com', groups=[GROUPS.GAIA, GROUPS.TEST], access_token="valid_access_token-123")
+            }, user_email='teste@gmail.com', groups=[GROUPS.GAIA, GROUPS.JUNDIAI], access_token="valid_access_token-123")
     
     def test_update_user_usecase_not_admin(self):
         repo = UserRepositoryMock()
@@ -40,7 +40,7 @@ class Test_UpdateUserUsecase:
             usecase(new_user_data={
                     'name': 'Gabriel Godoy 01',
                     'role': 'USER',
-            }, user_email='teste@gmail.com', groups=[GROUPS.GAIA, GROUPS.TEST], access_token="valid_access_token-teste3@gmail.com")
+            }, user_email='teste@gmail.com', groups=[GROUPS.GAIA, GROUPS.JUNDIAI], access_token="valid_access_token-teste3@gmail.com")
     
     def test_update_user_usecase_user_not_found(self):
         repo = UserRepositoryMock()
@@ -50,7 +50,7 @@ class Test_UpdateUserUsecase:
             usecase(new_user_data={
                     'name': 'Gabriel Godoy 01',
                     'role': 'USER',
-            }, user_email='invalid', groups=[GROUPS.GAIA, GROUPS.TEST], access_token="valid_access_token-teste@gmail.com")
+            }, user_email='invalid', groups=[GROUPS.GAIA, GROUPS.JUNDIAI], access_token="valid_access_token-teste@gmail.com")
 
 
 
